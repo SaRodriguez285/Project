@@ -1,2 +1,2 @@
-id,name,birth_year,nationality,era
-1,Johann Sebastian Bach,1685,German,Baroque
+id,name,birth_year,nationality,era,deleted
+1,Johann Sebastian Bach,1685,German,Baroque,False

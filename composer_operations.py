@@ -7,24 +7,40 @@ os.makedirs("data", exist_ok=True)
 
 FILE_PATH = "data/composers.csv"
 
-def load_composers() -> List[Composer]:
+def load_composers(include_deleted: bool = False) -> List[Composer]:
     composers = []
     try:
         with open(FILE_PATH, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                composers.append(Composer(**row))
+                # Convertir el campo deleted a booleano si viene como string
+                row["deleted"] = row.get("deleted", "False") == "True"
+                composer = Composer(**row)
+                if not include_deleted and composer.deleted:
+                    continue
+                composers.append(composer)
     except FileNotFoundError:
         print("Archivo no encontrado")
     return composers
 
-
 def save_composers(composers: List[Composer]):
-    print("Guardando compositores")
     with open(FILE_PATH, mode="w", newline="", encoding="utf-8") as file:
-        fieldnames = ["id", "name", "birth_year", "nationality", "era"]
+        fieldnames = ["id", "name", "birth_year", "nationality", "era", "deleted"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for composer in composers:
-            print("Escribiendo:", composer.dict())
             writer.writerow(composer.dict())
+
+def delete_composer_by_id(composer_id: int) -> bool:
+    composers = load_composers(include_deleted=True)
+    updated = False
+
+    for composer in composers:
+        if composer.id == composer_id and not composer.deleted:
+            composer.deleted = True
+            updated = True
+            break
+
+    if updated:
+        save_composers(composers)
+    return updated

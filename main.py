@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from composer_operations import load_composers, save_composers
 from models.composer import Composer
+from fastapi import HTTPException
+from composer_operations import delete_composer_by_id
 
 app = FastAPI()
 
@@ -22,3 +24,11 @@ def test_composer():
     save_composers([new_composer])
     composers = load_composers()
     return composers
+
+@app.delete("/delete-composer/{composer_id}")
+def delete_composer(composer_id: int):
+    success = delete_composer_by_id(composer_id)
+    if success:
+        return {"message": f"ID compositor {composer_id} marcado como eliminado."}
+    else:
+        raise HTTPException(status_code=404, detail=" Compositor no encontrado ")
