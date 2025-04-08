@@ -1,6 +1,9 @@
 import csv
 from typing import List
-from Models.composer import Composer
+from models.composer import Composer
+
+import os
+os.makedirs("data", exist_ok=True)
 
 FILE_PATH = "data/composers.csv"
 
@@ -12,14 +15,16 @@ def load_composers() -> List[Composer]:
             for row in reader:
                 composers.append(Composer(**row))
     except FileNotFoundError:
-        pass
+        print("Archivo no encontrado")
     return composers
 
 
 def save_composers(composers: List[Composer]):
+    print("Guardando compositores")
     with open(FILE_PATH, mode="w", newline="", encoding="utf-8") as file:
         fieldnames = ["id", "name", "birth_year", "nationality", "era"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for composer in composers:
+            print("Escribiendo:", composer.dict())
             writer.writerow(composer.dict())
