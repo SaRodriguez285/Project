@@ -21,6 +21,18 @@ def init_bach():
     save_composers([bach])
     return {"message": "Compositor Bach registrado", "composer": bach}
 
+@app.get("/composers/filter", response_model=List[Composer])
+def filter_composers(era: str = None, nationality: str = None):
+    composers = load_composers()
+
+    if era:
+        composers = [c for c in composers if c.era.lower() == era.lower()]
+
+    if nationality:
+        composers = [c for c in composers if c.nationality.lower() == nationality.lower()]
+
+    return composers
+
 @app.delete("/delete-composer/{composer_id}")
 def delete_composer(composer_id: int):
     success = delete_composer_by_id(composer_id)

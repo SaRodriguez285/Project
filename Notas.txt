@@ -1,0 +1,5 @@
+Notas importantes:
+- El servidor corre en el puerto 8001 (uvicorn main:app --reload --port 8001)
+- Para inicializar el sistema usar: /init-bach
+- Solo los compositores con deleted=False se listan por defecto
+- Ejemplo para inciar endpoint filtrar: http://127.0.0.1:8001/composers/filter?era=Classical
