@@ -8,4 +8,3 @@ class Composer(BaseModel):
     nationality: str
     era: str  # Baroque, Classical, Romantic
     deleted: Optional[bool] = False
-

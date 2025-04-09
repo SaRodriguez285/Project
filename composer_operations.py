@@ -51,7 +51,6 @@ def delete_composer_by_id(composer_id: int) -> bool:
 def add_composer(new_composer: Composer) -> Composer:
     composers = load_composers(include_deleted=True)
 
-    # Validar si ya existe un compositor con ese ID
     if any(c.id == new_composer.id for c in composers):
         raise ValueError("Ya existe un compositor con este ID")
 

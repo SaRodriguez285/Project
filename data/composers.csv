@@ -1,2 +1,6 @@
 id,name,birth_year,nationality,era,deleted
 1,Johann Sebastian Bach,1685,German,Baroque,False
+2,Wolfgang Amadeus Mozart,1756,Austrian,Classical,False
+3,Ludwig van Beethoven,1770,German,Classical,False
+4,Frédéric Chopin,1810,Polish,Romantic,False
+5,Antonio Vivaldi,1678,Italian,Baroque,False
