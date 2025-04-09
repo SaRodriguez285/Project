@@ -1,13 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from typing import List
 from composer_operations import (load_composers, save_composers, delete_composer_by_id, add_composer)
+from work_operations import (load_works, save_works, delete_work_by_id, add_work)
 from models.composer import Composer
+from models.work import Work
 
 app = FastAPI()
 
 @app.get("/")
 def root():
     return {"message": "Bienvenido a mi proyecto: evolución de la música"}
+
+#ENDPOINTS COMPOSER
 
 @app.get("/init-bach")
 def init_bach():
@@ -24,22 +28,11 @@ def init_bach():
 @app.get("/composers/filter", response_model=List[Composer])
 def filter_composers(era: str = None, nationality: str = None):
     composers = load_composers()
-
     if era:
         composers = [c for c in composers if c.era.lower() == era.lower()]
-
     if nationality:
         composers = [c for c in composers if c.nationality.lower() == nationality.lower()]
-
     return composers
-
-@app.delete("/delete-composer/{composer_id}")
-def delete_composer(composer_id: int):
-    success = delete_composer_by_id(composer_id)
-    if success:
-        return {"message": f"ID compositor {composer_id} marcado como eliminado."}
-    else:
-        raise HTTPException(status_code=404, detail="Compositor no encontrado")
 
 @app.get("/composers/{composer_id}", response_model=Composer)
 def get_composer_by_id(composer_id: int):
@@ -59,6 +52,13 @@ def update_composer(composer_id: int, updated_composer: Composer):
             return updated_composer
     raise HTTPException(status_code=404, detail="Compositor no encontrado o eliminado")
 
+@app.delete("/delete-composer/{composer_id}")
+def delete_composer(composer_id: int):
+    success = delete_composer_by_id(composer_id)
+    if success:
+        return {"message": f"ID compositor {composer_id} marcado como eliminado."}
+    else:
+        raise HTTPException(status_code=404, detail="Compositor no encontrado")
 
 @app.post("/composers")
 def create_composer(composer: Composer):
@@ -72,3 +72,24 @@ def create_composer(composer: Composer):
 def get_all_composers():
     return load_composers()
 
+#ENDPOINTS WORK
+
+@app.post("/works")
+def create_work(work: Work):
+    try:
+        added = add_work(work)
+        return {"message": "Obra añadida exitosamente", "work": added}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/works", response_model=List[Work])
+def get_all_works():
+    return load_works()
+
+@app.delete("/delete-work/{work_id}")
+def delete_work(work_id: int):
+    success = delete_work_by_id(work_id)
+    if success:
+        return {"message": f"ID obra {work_id} marcada como eliminada."}
+    else:
+        raise HTTPException(status_code=404, detail="Obra no encontrada")

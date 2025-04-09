@@ -1,0 +1,11 @@
+id,composer_id,title,year_composed,genre,deleted
+1,1,Brandenburg Concerto No. 3,1721,Concerto,False
+2,1,Toccata and Fugue in D minor,1704,Organ,False
+3,2,The Magic Flute,1791,Opera,False
+4,2,Symphony No. 40,1788,Symphony,False
+5,3,Symphony No. 5,1808,Symphony,False
+6,3,Moonlight Sonata,1801,Sonata,False
+7,4,"Nocturne in E-flat major, Op. 9, No. 2",1832,Nocturne,False
+8,4,"Polonaise in A-flat major, Op. 53",1842,Polonaise,False
+9,5,The Four Seasons,1725,Concerto,False
+10,5,Gloria in D major,1715,Choral,False
