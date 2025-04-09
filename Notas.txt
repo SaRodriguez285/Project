@@ -3,3 +3,4 @@ Notas importantes:
 - Para inicializar el sistema usar: /init-bach
 - Solo los compositores con deleted=False se listan por defecto
 - Ejemplo para inciar endpoint filtrar: http://127.0.0.1:8001/composers/filter?era=Classical
+- Ejemplo para filtrar obras por autor (Works): http://127.0.0.1:8001/works/by-composer/2

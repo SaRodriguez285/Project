@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Path
 from typing import List
 from composer_operations import (load_composers, save_composers, delete_composer_by_id, add_composer)
 from work_operations import (load_works, save_works, delete_work_by_id, add_work)
@@ -11,7 +11,7 @@ app = FastAPI()
 def root():
     return {"message": "Bienvenido a mi proyecto: evolución de la música"}
 
-#ENDPOINTS COMPOSER
+# ENDPOINTS COMPOSER
 
 @app.get("/init-bach")
 def init_bach():
@@ -72,7 +72,7 @@ def create_composer(composer: Composer):
 def get_all_composers():
     return load_composers()
 
-#ENDPOINTS WORK
+# ENDPOINTS WORK
 
 @app.post("/works")
 def create_work(work: Work):
@@ -93,3 +93,11 @@ def delete_work(work_id: int):
         return {"message": f"ID obra {work_id} marcada como eliminada."}
     else:
         raise HTTPException(status_code=404, detail="Obra no encontrada")
+
+@app.get("/works/by-composer/{composer_id}", response_model=List[Work])
+def get_works_by_composer(composer_id: int = Path(..., description="ID del compositor")):
+    works = load_works()
+    filtered_works = [work for work in works if work.composer_id == composer_id]
+    if not filtered_works:
+        raise HTTPException(status_code=404, detail="No se encontraron obras para este compositor.")
+    return filtered_works
