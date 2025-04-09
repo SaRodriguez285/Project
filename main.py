@@ -29,6 +29,25 @@ def delete_composer(composer_id: int):
     else:
         raise HTTPException(status_code=404, detail="Compositor no encontrado")
 
+@app.get("/composers/{composer_id}", response_model=Composer)
+def get_composer_by_id(composer_id: int):
+    composers = load_composers()
+    for composer in composers:
+        if composer.id == composer_id:
+            return composer
+    raise HTTPException(status_code=404, detail="Compositor no encontrado")
+
+@app.put("/composers/{composer_id}", response_model=Composer)
+def update_composer(composer_id: int, updated_composer: Composer):
+    composers = load_composers(include_deleted=True)
+    for i, composer in enumerate(composers):
+        if composer.id == composer_id and not composer.deleted:
+            composers[i] = updated_composer
+            save_composers(composers)
+            return updated_composer
+    raise HTTPException(status_code=404, detail="Compositor no encontrado o eliminado")
+
+
 @app.post("/composers")
 def create_composer(composer: Composer):
     try:
@@ -40,3 +59,4 @@ def create_composer(composer: Composer):
 @app.get("/composers", response_model=List[Composer])
 def get_all_composers():
     return load_composers()
+
