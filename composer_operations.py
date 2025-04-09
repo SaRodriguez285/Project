@@ -13,7 +13,7 @@ def load_composers(include_deleted: bool = False) -> List[Composer]:
         with open(FILE_PATH, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                # Convertir el campo deleted a booleano si viene como string
+
                 row["deleted"] = row.get("deleted", "False") == "True"
                 composer = Composer(**row)
                 if not include_deleted and composer.deleted:
@@ -23,6 +23,7 @@ def load_composers(include_deleted: bool = False) -> List[Composer]:
         print("Archivo no encontrado")
     return composers
 
+
 def save_composers(composers: List[Composer]):
     with open(FILE_PATH, mode="w", newline="", encoding="utf-8") as file:
         fieldnames = ["id", "name", "birth_year", "nationality", "era", "deleted"]
@@ -30,6 +31,7 @@ def save_composers(composers: List[Composer]):
         writer.writeheader()
         for composer in composers:
             writer.writerow(composer.dict())
+
 
 def delete_composer_by_id(composer_id: int) -> bool:
     composers = load_composers(include_deleted=True)
@@ -44,3 +46,15 @@ def delete_composer_by_id(composer_id: int) -> bool:
     if updated:
         save_composers(composers)
     return updated
+
+
+def add_composer(new_composer: Composer) -> Composer:
+    composers = load_composers(include_deleted=True)
+
+    # Validar si ya existe un compositor con ese ID
+    if any(c.id == new_composer.id for c in composers):
+        raise ValueError("Ya existe un compositor con este ID")
+
+    composers.append(new_composer)
+    save_composers(composers)
+    return new_composer
