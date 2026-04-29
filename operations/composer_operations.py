@@ -2,8 +2,8 @@ import csv
 from typing import List
 from models.composer import Composer
 import os
+import ast
 
-# Construir la ruta absoluta a la carpeta data
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -16,8 +16,11 @@ def load_composers(include_deleted: bool = False) -> List[Composer]:
         with open(FILE_PATH, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                # Convertir el campo deleted a booleano
+                row["id"] = int(row["id"])
+                row["birth_year"] = int(row["birth_year"])
                 row["deleted"] = row.get("deleted", "False") == "True"
+                instruments_str = row.get("instruments", "[]")
+                row["instruments"] = ast.literal_eval(instruments_str)
                 composer = Composer(**row)
                 if not include_deleted and composer.deleted:
                     continue
@@ -28,32 +31,30 @@ def load_composers(include_deleted: bool = False) -> List[Composer]:
 
 def save_composers(composers: List[Composer]):
     with open(FILE_PATH, mode="w", newline="", encoding="utf-8") as file:
-        fieldnames = ["id", "name", "birth_year", "nationality", "era", "deleted"]
+        fieldnames = ["id", "name", "birth_year", "nationality", "era", "instruments", "deleted"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for composer in composers:
-            writer.writerow(composer.dict())
+            row = composer.dict()
+            row["instruments"] = str(row["instruments"])
+            writer.writerow(row)
 
 def delete_composer_by_id(composer_id: int) -> bool:
     composers = load_composers(include_deleted=True)
     updated = False
-
     for composer in composers:
         if composer.id == composer_id and not composer.deleted:
             composer.deleted = True
             updated = True
             break
-
     if updated:
         save_composers(composers)
     return updated
 
 def add_composer(new_composer: Composer) -> Composer:
     composers = load_composers(include_deleted=True)
-
     if any(c.id == new_composer.id for c in composers):
         raise ValueError("Ya existe un compositor con este ID")
-
     composers.append(new_composer)
     save_composers(composers)
     return new_composer

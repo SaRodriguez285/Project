@@ -2,6 +2,7 @@ import csv
 from typing import List
 from models.work import Work
 import os
+import ast  # para convertir la cadena "['Violin','Trumpet']" en lista real
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
@@ -19,6 +20,8 @@ def load_works(include_deleted: bool = False) -> List[Work]:
                 row["composer_id"] = int(row["composer_id"])
                 row["year_composed"] = int(row["year_composed"])
                 row["deleted"] = row.get("deleted", "False") == "True"
+                instruments_str = row.get("instruments", "[]")
+                row["instruments"] = ast.literal_eval(instruments_str)
                 work = Work(**row)
                 if not include_deleted and work.deleted:
                     continue
@@ -29,11 +32,13 @@ def load_works(include_deleted: bool = False) -> List[Work]:
 
 def save_works(works: List[Work]):
     with open(FILE_PATH, mode="w", newline="", encoding="utf-8") as file:
-        fieldnames = ["id", "composer_id", "title", "year_composed", "genre", "deleted"]
+        fieldnames = ["id", "composer_id", "title", "year_composed", "genre", "instruments", "deleted"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for work in works:
-            writer.writerow(work.dict())
+            row = work.dict()
+            row["instruments"] = str(row["instruments"])
+            writer.writerow(row)
 
 def add_work(new_work: Work) -> Work:
     works = load_works(include_deleted=True)
@@ -46,13 +51,11 @@ def add_work(new_work: Work) -> Work:
 def delete_work_by_id(work_id: int) -> bool:
     works = load_works(include_deleted=True)
     updated = False
-
     for work in works:
         if work.id == work_id and not work.deleted:
             work.deleted = True
             updated = True
             break
-
     if updated:
         save_works(works)
-    return updated
+    return update

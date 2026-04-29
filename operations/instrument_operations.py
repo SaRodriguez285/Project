@@ -15,6 +15,7 @@ def load_instruments(include_deleted: bool = False) -> List[Instrument]:
         with open(FILE_PATH, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
+                row["id"] = int(row["id"])  # convertir a entero
                 row["deleted"] = row.get("deleted", "False") == "True"
                 instrument = Instrument(**row)
                 if not include_deleted and instrument.deleted:
