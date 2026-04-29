@@ -138,3 +138,23 @@ def delete_instrument(instrument_id: int):
         return {"message": f"Instrumento {instrument_id} marcado como eliminado."}
     else:
         raise HTTPException(status_code=404, detail="Instrumento no encontrado")
+
+@app.get("/composers/{composer_id}/instruments", response_model=List[str])
+def get_composer_instruments(composer_id: int):
+    composers = load_composers()
+    instruments = load_instruments()
+    for composer in composers:
+        if composer.id == composer_id:
+            # Convertir lista de nombres directamente
+            return composer.instruments
+    raise HTTPException(status_code=404, detail="Compositor no encontrado")
+
+@app.get("/works/{work_id}/instruments", response_model=List[str])
+def get_work_instruments(work_id: int):
+    works = load_works()
+    instruments = load_instruments()
+    for work in works:
+        if work.id == work_id:
+            # Convertir lista de nombres directamente
+            return work.instruments
+    raise HTTPException(status_code=404, detail="Obra no encontrada")
