@@ -155,3 +155,13 @@ def get_work_instruments(work_id: int):
             return work.instruments
     raise HTTPException(status_code=404, detail="Obra no encontrada")
 
+@app.get("/works/search")
+def search_works_by_genre(genre: str):
+    works = load_works()
+    return [w for w in works if w.genre == genre]
+
+@app.get("/instruments/search")
+def search_instruments_by_family(family: str):
+    instruments = load_instruments()
+    filtered = [i.dict() for i in instruments if i.family.lower() == family.lower()]
+    return filtered
