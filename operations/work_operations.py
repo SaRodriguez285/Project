@@ -1,8 +1,9 @@
 import csv
+from turtle import update
 from typing import List
 from models.work import Work
 import os
-import ast  # para convertir la cadena "['Violin','Trumpet']" en lista real
+import ast
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
