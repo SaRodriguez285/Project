@@ -1,11 +1,14 @@
 import csv
 from typing import List
 from models.composer import Composer
-
 import os
-os.makedirs("../data", exist_ok=True)
 
-FILE_PATH = "../data/composers.csv"
+# Construir la ruta absoluta a la carpeta data
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+os.makedirs(DATA_DIR, exist_ok=True)
+
+FILE_PATH = os.path.join(DATA_DIR, "composers.csv")
 
 def load_composers(include_deleted: bool = False) -> List[Composer]:
     composers = []
@@ -13,16 +16,15 @@ def load_composers(include_deleted: bool = False) -> List[Composer]:
         with open(FILE_PATH, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-
+                # Convertir el campo deleted a booleano
                 row["deleted"] = row.get("deleted", "False") == "True"
                 composer = Composer(**row)
                 if not include_deleted and composer.deleted:
                     continue
                 composers.append(composer)
     except FileNotFoundError:
-        print("Archivo no encontrado")
+        print("Archivo de compositores no encontrado")
     return composers
-
 
 def save_composers(composers: List[Composer]):
     with open(FILE_PATH, mode="w", newline="", encoding="utf-8") as file:
@@ -31,7 +33,6 @@ def save_composers(composers: List[Composer]):
         writer.writeheader()
         for composer in composers:
             writer.writerow(composer.dict())
-
 
 def delete_composer_by_id(composer_id: int) -> bool:
     composers = load_composers(include_deleted=True)
@@ -46,7 +47,6 @@ def delete_composer_by_id(composer_id: int) -> bool:
     if updated:
         save_composers(composers)
     return updated
-
 
 def add_composer(new_composer: Composer) -> Composer:
     composers = load_composers(include_deleted=True)
