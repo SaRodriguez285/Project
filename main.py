@@ -72,6 +72,18 @@ def create_work(work: Work):
 def get_all_works():
     return load_works()
 
+@app.put("/works/{work_id}", response_model=Work)
+def update_work(work_id: int, updated_work: Work):
+    works = load_works(include_deleted=True)
+    for i, work in enumerate(works):
+        if work.id == work_id and not work.deleted:
+            # Reemplazar el registro con el nuevo objeto enviado
+            works[i] = updated_work
+            save_works(works)
+            return updated_work
+    raise HTTPException(status_code=404, detail="Obra no encontrada o eliminada")
+
+
 @app.delete("/works/{work_id}")
 def delete_work(work_id: int):
     success = delete_work_by_id(work_id)
