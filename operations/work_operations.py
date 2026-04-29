@@ -1,11 +1,13 @@
 import csv
 from typing import List
 from models.work import Work
-
 import os
-os.makedirs("../data", exist_ok=True)
 
-FILE_PATH = "../data/works.csv"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+os.makedirs(DATA_DIR, exist_ok=True)
+
+FILE_PATH = os.path.join(DATA_DIR, "works.csv")
 
 def load_works(include_deleted: bool = False) -> List[Work]:
     works = []
