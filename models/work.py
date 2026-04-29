@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
-
+from typing import List
 
 class Work(BaseModel):
     id: int
@@ -8,5 +7,5 @@ class Work(BaseModel):
     title: str
     year_composed: int
     genre: str
-    instruments: List[int] = []   # IDs de instrumentos que suenan
+    instruments: List[str] = []
     deleted: bool = False

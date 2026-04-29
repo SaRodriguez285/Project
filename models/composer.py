@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
-
+from typing import List
 
 class Composer(BaseModel):
     id: int
@@ -8,5 +7,5 @@ class Composer(BaseModel):
     birth_year: int
     nationality: str
     era: str
-    instruments: List[int] = []   # IDs de instrumentos asociados
+    instruments: List[str] = [] 
     deleted: bool = False

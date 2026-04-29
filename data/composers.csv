@@ -1,6 +1,6 @@
 id,name,birth_year,nationality,era,instruments,deleted
-1,Johann Sebastian Bach,1685,German,Baroque,"[3]",False
-2,Wolfgang Amadeus Mozart,1756,Austrian,Classical,"[1,2,4]",False
-3,Ludwig van Beethoven,1770,German,Classical,"[1,2]",False
-4,Frédéric Chopin,1810,Polish,Romantic,"[2]",False
-5,Antonio Vivaldi,1678,Italian,Baroque,"[1]",False
+1,Johann Sebastian Bach,1685,German,Baroque,"['Organ']",False
+2,Wolfgang Amadeus Mozart,1756,Austrian,Classical,"['Violin','Piano','Trumpet']",False
+3,Ludwig van Beethoven,1770,German,Classical,"['Violin','Piano']",False
+4,Frédéric Chopin,1810,Polish,Romantic,"['Piano']",False
+5,Antonio Vivaldi,1678,Italian,Baroque,"['Violin']",False
