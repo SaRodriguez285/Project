@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Path
 from typing import List
-from composer_operations import (load_composers, save_composers, delete_composer_by_id, add_composer)
-from work_operations import (load_works, save_works, delete_work_by_id, add_work)
+from operations.composer_operations import (load_composers, save_composers, delete_composer_by_id, add_composer)
+from operations.work_operations import (load_works, delete_work_by_id, add_work)
 from models.composer import Composer
 from models.work import Work
 

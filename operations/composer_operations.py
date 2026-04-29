@@ -3,9 +3,9 @@ from typing import List
 from models.composer import Composer
 
 import os
-os.makedirs("data", exist_ok=True)
+os.makedirs("../data", exist_ok=True)
 
-FILE_PATH = "data/composers.csv"
+FILE_PATH = "../data/composers.csv"
 
 def load_composers(include_deleted: bool = False) -> List[Composer]:
     composers = []

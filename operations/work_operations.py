@@ -3,9 +3,9 @@ from typing import List
 from models.work import Work
 
 import os
-os.makedirs("data", exist_ok=True)
+os.makedirs("../data", exist_ok=True)
 
-FILE_PATH = "data/works.csv"
+FILE_PATH = "../data/works.csv"
 
 def load_works(include_deleted: bool = False) -> List[Work]:
     works = []
